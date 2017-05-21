@@ -8,7 +8,7 @@
     </div>
     <%if(user && article.user == user._id){%>
     <div class="panel-footer">
-        <a class="btn btn-warning" href="">编辑</a>
+        <a class="btn btn-warning" href="/article/update/<%=article._id%>">编辑</a>
         <a class="btn btn-danger" href="/article/delete/<%=article._id%>">删除</a>
     </div>
     <%}%>
