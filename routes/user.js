@@ -26,13 +26,16 @@ router.post('/signup',function(req,res){
 router.get('/signin',function (req,res) {
   res.render('user/signin',{title:'登录'});
 });
+//用户登录
 router.post('/signin',function(req,res){
-  let user = req.body;
+  let user = req.body;//得到用户提交的登录表单
   User.findOne(user,function(err,doc){
       if(err){
           res.redirect('back');
       }else{
           if(doc){
+              //向会话对象中写入属性 user=doc
+              req.session.user = doc;
               res.redirect('/');
           }else{
               res.redirect('back');
