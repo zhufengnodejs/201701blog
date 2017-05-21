@@ -2,6 +2,7 @@ let express = require('express');
 let path = require('path');
 let bodyParser = require('body-parser');
 let session = require('express-session');
+let MongoStore = require('connect-mongo')(session);
 //消息提示中间件 flash 闪光 一闪而过
 let flash = require('connect-flash');
 let app = express();
@@ -23,7 +24,10 @@ app.use(session({
     cookie:{
       maxAge:3600*1000 //指定cookie的过期时间
     },
-    saveUninitialized:true //保存未初始化的session
+    saveUninitialized:true, //保存未初始化的session
+    store:new MongoStore({
+        url:require('./config').dbUrl
+    })
 }));
 //切记此中间件的使用要放在session的后面，因为此中间件是需要依赖session的 req.flash(type,msg) req.flash(type)
 app.use(flash());
@@ -33,6 +37,7 @@ let article = require('./routes/article');
 app.use(function (req,res,next) {
     //真正渲染模板的是res.locals
     res.locals.user = req.session.user;
+    res.locals.keyword = '';
     //flash的功能是读完一次之后会立刻清空数据
     res.locals.success = req.flash('success').toString();
     res.locals.error = req.flash('error').toString();

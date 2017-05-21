@@ -15,4 +15,26 @@
         </div>
     </div>
 <%})%>
+<nav>
+    <ul class="pagination">
+        <%if(pageNum>1){%>
+        <li>
+            <a href="/?pageNum=<%=pageNum-1%>" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+            </a>
+        </li>
+        <%}%>
+
+        <%for(let i=1;i<=totalPages;i++){%>
+             <li class="<%=i==pageNum?'active':''%>"><a href="/?pageNum=<%=i%>"><%=i%></a></li>
+        <%}%>
+        <%if(pageNum<totalPages){%>
+        <li>
+            <a href="/?pageNum=<%=pageNum+1%>" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+            </a>
+        </li>
+        <%}%>
+    </ul>
+</nav>
 <% include include/footer.html%>
