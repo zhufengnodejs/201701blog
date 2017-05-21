@@ -20,5 +20,16 @@ router.post('/add',checkLogin,function(req,res){
         }
     })
 });
+router.get('/detail/:_id',function(req,res){
+  let _id = req.params._id;//获取路径参数_id
+  Article.findById(_id,function(err,article){
+    if(err){
+        req.flash('error',err);
+        res.redirect('back');
+    }else{
+        res.render('article/detail',{title:'文章详情',article});
+    }
+  })
+});
 // module model
 module.exports = router;

@@ -7,7 +7,9 @@
             </a>
         </div>
         <div class="media-body">
-            <h3 class="media-heading"><%=article.title%></h3>
+            <h3 class="media-heading">
+                <a href="/article/detail/<%=article._id%>"><%=article.title%></a>
+            </h3>
             <p><%=article.content%></p>
             <p>发表时间:<%=article.createAt.toLocaleString()%>|作者:<%=article.user.username%></p>
         </div>

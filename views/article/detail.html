@@ -1,0 +1,14 @@
+<% include ../include/header.html%>
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <%=article.title%>
+    </div>
+    <div class="panel-body">
+        <%=article.content%>
+    </div>
+    <div class="panel-footer">
+        <a class="btn btn-warning" href="">编辑</a>
+        <a class="btn btn-danger" href="/article/delete/<%=article._id%>">删除</a>
+    </div>
+</div>
+<% include ../include/footer.html%>
