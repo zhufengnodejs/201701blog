@@ -1,5 +1,8 @@
 let express = require('express');
 let {User} = require('../model');
+let multer = require('multer');
+//dest表示上传的文件的存放路径
+let uploads = multer({dest:'public/uploads'});
 let {checkLogin,checkNotLogin} = require('../auth');
 let router = express.Router();
 //用户注册 /user/signup
@@ -13,8 +16,10 @@ let router = express.Router();
 router.get('/signup',checkNotLogin,function(req,res){
     res.render('user/signup',{title:'注册'});
 });
-router.post('/signup',checkNotLogin,function(req,res){
-  let user = req.body;//请求体对象(username,password,email)
+// single 当表单里只有一个上传字段的话 avatar是上传文件字段的name属性 req.file req.body
+router.post('/signup',checkNotLogin,uploads.single('avatar'),function(req,res){
+    let user = req.body;//请求体对象(username,password,email)
+    user.avatar = `/uploads/${req.file.filename}`;
   User.create(user,function(err,doc){//_id
     if(err){//表示 注册失败
         //消息的类型是error,内容是用户注册失败
@@ -58,3 +63,20 @@ router.get('/signout',checkLogin,function (req,res) {
     res.redirect('/user/signin');
 });
 module.exports = router;
+
+/**
+ *
+ req.file=
+ { fieldname: 'avatar', 上传字段的名称
+  originalname: '1.jpg', 上传前的原始文件名
+  encoding: '7bit',
+  mimetype: 'image/jpeg', 文件类型
+  destination: 'public/uploads',在服务器上保存的目录
+  filename: 'cc5137ab61b3f6ba72afa247865013ab',在服务器保存的文件名
+  path: 'public\\uploads\\cc5137ab61b3f6ba72afa247865013ab',
+  size: 129931 文件体积
+  }
+
+ req.body=
+ { username: '1234', password: '1234', email: '1@1.com' }
+ **/
