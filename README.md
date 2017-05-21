@@ -51,4 +51,5 @@ app.listen(8080);
    4. 拼出avatar图片路径并赋给req.body对象
    5. 在User模型中添加avatar属性
 10. 新增发表文章
+11. 首页显示文章列表
 

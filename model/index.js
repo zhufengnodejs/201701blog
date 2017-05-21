@@ -1,4 +1,5 @@
 let mongoose = require('mongoose');
+mongoose.Promise = Promise;
 let ObjectId = mongoose.Schema.Types.ObjectId;
 //连接数据库
 mongoose.connect('mongodb://127.0.0.1/201701blog');
