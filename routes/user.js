@@ -16,9 +16,12 @@ router.get('/signup',checkNotLogin,function(req,res){
 router.post('/signup',checkNotLogin,function(req,res){
   let user = req.body;//请求体对象(username,password,email)
   User.create(user,function(err,doc){//_id
-    if(err){
+    if(err){//表示 注册失败
+        //消息的类型是error,内容是用户注册失败
+        req.flash('error','用户注册失败');
         res.redirect('back');
     }else{
+        req.flash('success','用户注册成功');
         res.redirect('/user/signin');
     }
   });
@@ -31,14 +34,18 @@ router.get('/signin',checkNotLogin,function (req,res) {
 router.post('/signin',checkNotLogin,function(req,res){
   let user = req.body;//得到用户提交的登录表单
   User.findOne(user,function(err,doc){
-      if(err){
+      if(err){//如果登录查询的时候失败了
+          req.flash('error','操作数据库失败');
           res.redirect('back');
       }else{
           if(doc){
               //向会话对象中写入属性 user=doc
+              //存放的是数组 取出来的也是数组
+              req.flash('success','用户登录成功');
               req.session.user = doc;
               res.redirect('/');
           }else{
+              req.flash('error','用户或密码不正确');
               res.redirect('back');
           }
       }
@@ -47,6 +54,7 @@ router.post('/signin',checkNotLogin,function(req,res){
 //用户退出登录
 router.get('/signout',checkLogin,function (req,res) {
     req.session.user = null;
+    req.flash('success','用户退出成功');
     res.redirect('/user/signin');
 });
 module.exports = router;

@@ -2,6 +2,8 @@ let express = require('express');
 let path = require('path');
 let bodyParser = require('body-parser');
 let session = require('express-session');
+//消息提示中间件 flash 闪光 一闪而过
+let flash = require('connect-flash');
 let app = express();
 //设置模板引擎 html
 app.set('view engine','html');
@@ -19,12 +21,17 @@ app.use(session({
     secret:'zfpx',//用来加密cookie
     saveUninitialized:true //保存未初始化的session
 }));
+//切记此中间件的使用要放在session的后面，因为此中间件是需要依赖session的 req.flash(type,msg) req.flash(type)
+app.use(flash());
 let index = require('./routes/index');
 let user = require('./routes/user');
 let article = require('./routes/article');
 app.use(function (req,res,next) {
     //真正渲染模板的是res.locals
     res.locals.user = req.session.user;
+    //flash的功能是读完一次之后会立刻清空数据
+    res.locals.success = req.flash('success').toString();
+    res.locals.error = req.flash('error').toString();
     next();
 });
 app.use('/',index);
